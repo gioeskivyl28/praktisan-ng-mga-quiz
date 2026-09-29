@@ -6,48 +6,49 @@ has_defaults = bool(eval(input("Do you have defaults? (True/False) -->")))
 collateral_name = str(input("Your collateral name -->"))
 collateral_value = float(input("what's the value of your collateral? -->"))
 
-if owner_age < 21 or years_in_business < 2.0 or has_defaults == True:
-    print("Rejected: High risk Application or Inelligible Owner")
-    
-    #Tier 1
-    max_loan_limit = 0
-    fee_rate = 0
+ml = 0
+bf = 0
 
+if owner_age >= 21 and years_in_business >= 2.0 and has_defaults == False:
+    print("BASELINE PASSED")
+    #tier 1:
     if credit_score >= 720:
-        max_Loan_limit = 3 * monthly_revenue
+        ml = 3 * monthly_revenue
+        print("MAXIMUM LOANABLE AMOUNT IS SET TO", ml)
+        print("HIGH CREDIT SCORE")
         if monthly_revenue >= 50000:
-            fee_rate = 1.5
+            print("REVENUE HIGHER THAN 50K")
+            bf = ml * 0.015
+            print("BASE FEE IS SET TO", bf)
         else:
-            fee_rate = 2.5
-            tier_passed = True
-
-    #Tier 2
-    elif 620 <= credit_score <720:
-        max_loan_limit = 1.5 * monthly_revenue
+            bf = ml * 0.025
+            print("BASE FEE IS SET TO", bf)
+        if collateral_value >= ml:
+            print("Collateral", collateral_name "with a value of", collateral_value "is accepted")
+        else: 
+            print("rejected: insufficient collateral value for", collateral_name)
+        #surcharge
+        if collateral_value % 5000:
+    #tier 2
+    elif 620 <= credit_score < 720:
+        print("Credit score within 620 and 720")
+        ml = monthly_revenue * 0.015
+        print("MAXIMUM LOANABLE AMOUNT IS SET TO", ml)
         if years_in_business >= 5.0:
-            fee_rate = 2.0
+            bf = 0.02
+            print("BASELINE FEE IS SET TO", bf)
         else:
-            fee_rate = 3.5
-            tier_passed = True
+            bf = 0.035
+            print("BASELINE FEE IS SET TO", bf)
+    #tier 3
+    elif credit_score < 620:
+        print("Rejected: Credit score is too low")
+#collateral and modulus fee rules part
 
-    #Tier 3
-    else:
-        credit_score < 620
-        print("rejected: Credit score below requirement") 
-        tier_passed = False
 
-# collateral and modulus fee rules (tier 1 and tier 2 only)
-    if tier_passed == True:
 
-        if collateral_value < max_loan_limit:
-            print("Rejected: Insufficient collateral value for", collateral_name)
 
-        else:
-            base_fee = max_loan_limit * fee_rate 
-            if int(collateral_value) % 5000 != 0:
-                final_fee = base_fee + 250
 
-print("Application approved")
-print("mamamammam")
-print("Next tym ko po tatapusin")
-        
+
+else:
+    print("YOU'RE NOT QUALIFIED")
